@@ -1,0 +1,90 @@
+{% extends "plantillaBase.html" %}
+
+{% block titulo %} Detalle de la Solución {% endblock %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <h5 class="card-title">Detalles de la Solución</h5>
+                </div>
+                <div class="card-body">
+                    <form class="formulario">
+                        {% if solucion_alerta %}
+                            <div class="mb-3">
+                                <label for="descripcionSolucion" class="form-label"><strong>Descripción:</strong></label>
+                                <p id="descripcionSolucion">{{ solucion_alerta.descripcion }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <label for="fechaSolucion" class="form-label"><strong>Fecha de Resolución:</strong></label>
+                                <p id="fechaSolucion">{{ solucion_alerta.fecha_resolucion }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <label for="encargadoSolucion" class="form-label"><strong>Encargado de Solución:</strong></label>
+                                <p id="encargadoSolucion">{{ solucion_alerta.alerta.encargado }}</p>
+                            </div>
+                        {% else %}
+                            <div class="mb-3">
+                                <p><strong>Solución en Espera</strong></p>
+                            </div>
+                        {% endif %}
+                    </form>
+                </div>
+                <div class="card-header">
+                    <h5 class="card-title">Evidencias de la Solución</h5>
+                </div>
+                <div class="card-body">
+                    <div id="solucionCarousel" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            {% if solucion_alerta.evidencia1 %}
+                                <div class="carousel-item active">
+                                    <img src="{{ solucion_alerta.evidencia1.url }}" class="d-block w-100 carousel-image" alt="Evidencia 1">
+                                </div>
+                            {% endif %}
+                            {% if solucion_alerta.evidencia2 %}
+                                <div class="carousel-item {% if not solucion_alerta.evidencia1 %}active{% endif %}">
+                                    <img src="{{ solucion_alerta.evidencia2.url }}" class="d-block w-100 carousel-image" alt="Evidencia 2">
+                                </div>
+                            {% endif %}
+                            {% if solucion_alerta.evidencia3 %}
+                                <div class="carousel-item {% if not solucion_alerta.evidencia1 and not solucion_alerta.evidencia2 %}active{% endif %}">
+                                    <img src="{{ solucion_alerta.evidencia3.url }}" class="d-block w-100 carousel-image" alt="Evidencia 3">
+                                </div>
+                            {% endif %}
+                        </div>
+                        <a class="carousel-control-prev custom-carousel-control" href="#solucionCarousel" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Anterior</span>
+                        </a>
+                        <a class="carousel-control-next custom-carousel-control" href="#solucionCarousel" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Siguiente</span>
+                        </a>
+                    </div>
+                    <div class="text-center mt-3">
+                        <div class="btn-container">
+                            <div class="btn-left">
+                                {% if solucion_alerta %}
+                                    <form method="POST" action="{% url 'aceptar_solucion' solucion_alerta.alerta.idAlerta %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success btn-accept">Aceptar Solución</button>
+                                    </form>
+                                    <form method="POST" action="{% url 'rechazar_solucion' solucion_alerta.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-reject">Rechazar Solución</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                            <div class="btn-right">
+                                <a href="{% url 'listar_alertas' %}" class="btn btn-secondary btn-back">Regresar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
