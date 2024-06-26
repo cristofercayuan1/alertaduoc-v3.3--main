@@ -770,9 +770,7 @@ def tomar_alerta(request, alerta_id):
         alerta.save()
         messages.success(request, 'Alerta tomada correctamente.')
 
-    return JsonResponse({'success': 'Alerta tomada correctamente.'})
-
-
+    return redirect('listar_alertas')  # Redirigir a la lista de alertas o a la vista adecuada
 
 @login_required
 def desasignar_alerta(request):

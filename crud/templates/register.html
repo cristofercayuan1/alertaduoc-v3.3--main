@@ -18,7 +18,9 @@
                         <div class="mb-3 row align-items-center">
                             <label for="{{ form.username.id_for_label }}" class="col-sm-4 col-form-label">Nombre de Usuario:</label>
                             <div class="col-sm-8">
-                                <input type="text" name="username" id="{{ form.username.id_for_label }}" class="form-control {% if form.username.errors %}is-invalid{% endif %}">
+                                <input type="text" name="username" id="{{ form.username.id_for_label }}"
+                                       value="{{ form.username.value|default_if_none:'' }}"
+                                       class="form-control {% if form.username.errors %}is-invalid{% endif %}">
                                 {{ form.username.errors }}
                                 <small id="{{ form.username.id_for_label }}Help" class="form-text text-muted">Mínimo 5 caracteres. Solo letras, números y @/./+/-/_.</small>
                             </div>
@@ -27,7 +29,8 @@
                         <div class="mb-3 row align-items-center">
                             <label for="{{ form.password1.id_for_label }}" class="col-sm-4 col-form-label">Contraseña:</label>
                             <div class="col-sm-8">
-                                <input type="password" name="password1" id="{{ form.password1.id_for_label }}" class="form-control {% if form.password1.errors %}is-invalid{% endif %}">
+                                <input type="password" name="password1" id="{{ form.password1.id_for_label }}"
+                                       class="form-control {% if form.password1.errors %}is-invalid{% endif %}">
                                 {{ form.password1.errors }}
                                 <small id="{{ form.password1.id_for_label }}Help" class="form-text text-muted">Mínimo 8 caracteres. Al menos 1 letra y 1 número.</small>
                             </div>
@@ -36,7 +39,8 @@
                         <div class="mb-3 row align-items-center">
                             <label for="{{ form.password2.id_for_label }}" class="col-sm-4 col-form-label">Repetir Contraseña:</label>
                             <div class="col-sm-8">
-                                <input type="password" name="password2" id="{{ form.password2.id_for_label }}" class="form-control {% if form.password2.errors %}is-invalid{% endif %}">
+                                <input type="password" name="password2" id="{{ form.password2.id_for_label }}"
+                                       class="form-control {% if form.password2.errors %}is-invalid{% endif %}">
                                 {{ form.password2.errors }}
                             </div>
                         </div>
@@ -44,7 +48,9 @@
                         <div class="mb-3 row align-items-center">
                             <label for="{{ form.first_name.id_for_label }}" class="col-sm-4 col-form-label">Nombre:</label>
                             <div class="col-sm-8">
-                                <input type="text" name="first_name" id="{{ form.first_name.id_for_label }}" class="form-control {% if form.first_name.errors %}is-invalid{% endif %}">
+                                <input type="text" name="first_name" id="{{ form.first_name.id_for_label }}"
+                                       value="{{ form.first_name.value|default_if_none:'' }}"
+                                       class="form-control {% if form.first_name.errors %}is-invalid{% endif %}">
                                 {{ form.first_name.errors }}
                             </div>
                         </div>
@@ -52,7 +58,9 @@
                         <div class="mb-3 row align-items-center">
                             <label for="{{ form.last_name.id_for_label }}" class="col-sm-4 col-form-label">Apellidos:</label>
                             <div class="col-sm-8">
-                                <input type="text" name="last_name" id="{{ form.last_name.id_for_label }}" class="form-control {% if form.last_name.errors %}is-invalid{% endif %}">
+                                <input type="text" name="last_name" id="{{ form.last_name.id_for_label }}"
+                                       value="{{ form.last_name.value|default_if_none:'' }}"
+                                       class="form-control {% if form.last_name.errors %}is-invalid{% endif %}">
                                 {{ form.last_name.errors }}
                             </div>
                         </div>
@@ -60,7 +68,9 @@
                         <div class="mb-3 row align-items-center">
                             <label for="{{ form.email.id_for_label }}" class="col-sm-4 col-form-label">Correo Electrónico:</label>
                             <div class="col-sm-8">
-                                <input type="email" name="email" id="{{ form.email.id_for_label }}" class="form-control {% if form.email.errors %}is-invalid{% endif %}">
+                                <input type="email" name="email" id="{{ form.email.id_for_label }}"
+                                       value="{{ form.email.value|default_if_none:'' }}"
+                                       class="form-control {% if form.email.errors %}is-invalid{% endif %}">
                                 {{ form.email.errors }}
                             </div>
                         </div>
@@ -72,7 +82,7 @@
                                 {{ form.rol.errors }}
                             </div>
                         </div>
-                    
+
                         {% if not hide_departamento %}
                         <div class="mb-3 row align-items-center">
                             <label for="{{ form.departamento.id_for_label }}" class="col-sm-4 col-form-label">Departamento:</label>

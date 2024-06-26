@@ -107,7 +107,10 @@
                                     <td>
                                         <a href="{% url 'detalles_alerta' alerta.idAlerta %}" class="btn btn-primary btn-sm">Ver Detalles</a>
                                         {% if user.usuario.rol.rol == 'apoyo' and not alerta.encargado %}
-                                            <button class="btn btn-warning btn-sm tomar-alerta-btn" data-alerta-id="{{ alerta.idAlerta }}">Tomar Alerta</button>
+                                            <form method="POST" action="{% url 'tomar_alerta' alerta.idAlerta %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-warning btn-sm">Tomar Alerta</button>
+                                            </form>
                                         {% endif %}
                                         {% if user.is_authenticated %}
                                             {% if user.usuario.rol.rol == 'admin' %}
@@ -161,25 +164,6 @@
     </div>
 </div>
 
-<!-- Modal de Confirmación de Toma de Alerta -->
-<div class="modal fade" id="confirmacion-tomar-alerta-modal" tabindex="-1" aria-labelledby="confirmacion-tomar-alerta-modal-label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmacion-tomar-alerta-modal-label">Confirmación de Toma de Alerta</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ¿Estás seguro de que deseas tomar esta alerta?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="confirmar-tomar-alerta-btn">Tomar Alerta</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var asignarModal = document.getElementById('asignarModal');
@@ -189,64 +173,6 @@
             var inputAlertId = document.getElementById('alertaIdInput');
             inputAlertId.value = alertaId;
         });
-
-        var tomarAlertaButtons = document.querySelectorAll('.tomar-alerta-btn');
-
-        tomarAlertaButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
-                var alertaId = button.getAttribute('data-alerta-id');
-                
-                // Mostrar modal de confirmación de toma de alerta
-                $('#confirmacion-tomar-alerta-modal').modal('show');
-
-                // Al hacer clic en el botón de confirmación del modal
-                document.getElementById('confirmar-tomar-alerta-btn').addEventListener('click', function() {
-                    // Realizar petición AJAX para tomar la alerta
-                    var url = '/tomar-alerta/' + alertaId + '/';
-                    
-                    fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': getCookie('csrftoken')
-                        }
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error al tomar la alerta');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Mostrar mensaje de éxito
-                        $('#confirmacion-tomar-alerta-modal').modal('hide'); // Ocultar el modal
-                        alert('Alerta tomada con éxito');
-                        // Actualizar la página o hacer cualquier acción necesaria
-                        window.location.reload();
-                    })
-                    .catch(error => {
-                        console.error('Error al tomar la alerta:', error);
-                        alert('Error al tomar la alerta. Por favor, intenta de nuevo.');
-                    });
-                });
-            });
-        });
-
-        // Función auxiliar para obtener el valor de la cookie CSRF
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
     });
 </script>
 
