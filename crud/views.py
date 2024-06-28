@@ -941,19 +941,22 @@ def aceptar_solucion(request, solucion_id):
 @login_required
 @require_POST
 def rechazar_solucion(request, solucion_id):
+    comentario_rechazo = request.POST.get('comentario_rechazo', '')
+
     try:
         solucion = get_object_or_404(SolucionAlerta, pk=solucion_id)
         alerta = get_object_or_404(Alerta, idAlerta=solucion.alerta.idAlerta)
 
-        # Cambiar estado de la alerta a "Pendiente"
-        alerta.estado = '1'
+        # Cambiar estado de la alerta a "Solución rechazada" y agregar el comentario de rechazo
+        alerta.estado = '4'
+        alerta.comentario_rechazo = comentario_rechazo
         alerta.save()
 
         # Eliminar la solución
         solucion.delete()
 
         # Añadir mensaje de éxito
-        messages.success(request, 'Solución rechazada correctamente. La alerta ha sido marcada como pendiente nuevamente.')
+        messages.success(request, 'Solución rechazada correctamente. La alerta ha sido marcada como solución rechazada.')
 
     except Alerta.DoesNotExist:
         messages.error(request, 'La alerta especificada no existe.')
@@ -965,7 +968,6 @@ def rechazar_solucion(request, solucion_id):
         messages.error(request, f'Error: {str(e)}')
 
     return redirect('listar_alertas')
-
 
 @login_required
 def perfil(request):

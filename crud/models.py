@@ -104,6 +104,7 @@ class Alerta(models.Model):
         ('1', 'Pendiente'),
         ('2', 'Resuelto'),
         ('3', 'En observación'),
+        ('4', 'Solución rechazada'),  # Nuevo estado
     ]
     estado = models.CharField(max_length=1, choices=estado_choices, default='1')
     fecha = models.DateTimeField(null=True)
@@ -116,7 +117,8 @@ class Alerta(models.Model):
     ubicacion = models.CharField(max_length=50, null=True)
     urgente = models.BooleanField(default=False)
     encargado = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='alertas_encargadas')
-    
+    comentario_rechazo = models.TextField(blank=True, null=True)  # Campo para el comentario de rechazo
+
     def save(self, *args, **kwargs):
         if not self.idAlerta:
             self.idAlerta = self.generate_unique_id()

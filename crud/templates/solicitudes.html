@@ -81,11 +81,14 @@
                             </thead>
                             <tbody>
                                 {% for alerta in alertas %}
-                                <tr class="{% if alerta.urgente %}table-danger{% endif %}">
+                                <tr class="{% if alerta.estado == '2' %}table-success{% elif alerta.estado == '3' %}table-warning{% elif alerta.estado == '4' %}table-primary{% endif %}">
                                     <td>{{ alerta.fecha }}</td>
                                     <td>{{ alerta.ubicacion }}</td>
                                     <td>{{ alerta.tipo_incidencia.incidencia }}</td>
                                     <td>
+                                        {% if alerta.urgente %}
+                                            🚨
+                                        {% endif %}
                                         {% if alerta.encargado %}
                                             {% if alerta.estado == '1' %}
                                                 <span style="color: yellow; font-size: 1.2em;">‎❕</span> Pendiente / {{ alerta.encargado.username }}
@@ -93,6 +96,8 @@
                                                 <span style="color: #87CEEB; font-size: 1.2em;">👁️‍🗨️</span> Observación / {{ alerta.encargado.username }}
                                             {% elif alerta.estado == '2' %}
                                                 <span style="color: green; font-size: 1.2em;">✔</span> Resuelto / {{ alerta.encargado.username }}
+                                            {% elif alerta.estado == '4' %}
+                                                <span style="color: blue; font-size: 1.2em;">🚫</span> Solución Rechazada / {{ alerta.encargado.username }}
                                             {% endif %}
                                         {% else %}
                                             {% if alerta.estado == '1' %}
@@ -101,6 +106,8 @@
                                                 <span style="color: #87CEEB; font-size: 1.2em;">👁️‍🗨️</span> Observación / Sin Asignar
                                             {% elif alerta.estado == '2' %}
                                                 <span style="color: green; font-size: 1.2em;">✔</span> Resuelto / Sin Asignar
+                                            {% elif alerta.estado == '4' %}
+                                                <span style="color: blue; font-size: 1.2em;">🚫</span> Solución Rechazada / Sin Asignar
                                             {% endif %}
                                         {% endif %}
                                     </td>

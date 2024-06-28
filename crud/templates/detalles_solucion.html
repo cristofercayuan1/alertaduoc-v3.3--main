@@ -1,6 +1,6 @@
 {% extends "plantillaBase.html" %}
 
-{% block titulo %} Detalle de la Solución {% endblock %}
+{% block titulo %}Detalle de la Solución{% endblock %}
 
 {% block contenido %}
 <div class="container mt-5">
@@ -64,22 +64,26 @@
                         </a>
                     </div>
                     <div class="text-center mt-3">
-                        <div class="btn-container">
-                            <div class="btn-left">
-                                {% if solucion_alerta %}
+                        {% if user.usuario.rol.rol == 'admin' %}
+                            <div class="btn-container">
+                                <div class="btn-left">
                                     <form method="POST" action="{% url 'aceptar_solucion' solucion_alerta.alerta.idAlerta %}">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-success btn-accept">Aceptar Solución</button>
                                     </form>
                                     <form method="POST" action="{% url 'rechazar_solucion' solucion_alerta.pk %}">
                                         {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="comentario_rechazo" class="form-label">Motivo del Rechazo:</label>
+                                            <textarea id="comentario_rechazo" name="comentario_rechazo" class="form-control" rows="3" required></textarea>
+                                        </div>
                                         <button type="submit" class="btn btn-danger btn-reject">Rechazar Solución</button>
                                     </form>
-                                {% endif %}
+                                </div>
                             </div>
-                            <div class="btn-right">
-                                <a href="{% url 'listar_alertas' %}" class="btn btn-secondary btn-back">Regresar</a>
-                            </div>
+                        {% endif %}
+                        <div class="btn-right">
+                            <a href="{% url 'listar_alertas' %}" class="btn btn-secondary btn-back">Regresar</a>
                         </div>
                     </div>
                 </div>

@@ -7,7 +7,10 @@ pip install Pillow
 pip install -r requirements.txt
 pip install reportlab
 
--- VERSION 3.5
+-- VERSION 3.6
+se agrega un tercer grafico/tabla sobre el personal mas destacado por departamento
+se mejora la vizualizacion de las solicitudes
+se agrega comentario sobre la alerta rechazada.
 MEJORA DE CODIGO
 SE ARREGLA REGISTER_USER LO QUE PERMITE REGISTRAR USUARIOS correctamente
 OPTIMIZACION DE ESTADISTICAS Y GRAFICOS
