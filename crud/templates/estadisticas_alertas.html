@@ -17,6 +17,12 @@
                 height: auto;
             }
         }
+
+        @media (max-width: 576px) {
+            .table-responsive {
+                overflow-x: auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -38,6 +44,32 @@
             </div>
             <div class="card-body">
                 <img src="data:image/png;base64,{{ grafico_solicitadas }}" alt="Gráfico de Alertas por Tipo de Incidencia" class="img-fluid">
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Usuario Destacado por Departamento</h2>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Departamento</th>
+                            <th>Usuario</th>
+                            <th>Alertas Resueltas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in usuarios_destacados %}
+                        <tr>
+                            <td>{{ usuario.departamento__nombredep }}</td>
+                            <td>{{ usuario.encargado__username }}</td>
+                            <td>{{ usuario.total_resueltas }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

@@ -118,6 +118,9 @@ class UserRegistrationForm(forms.ModelForm):
 
 
 class UserEditForm(forms.ModelForm):
+    new_password1 = forms.CharField(label='Nueva Contraseña', widget=forms.PasswordInput, required=False)
+    new_password2 = forms.CharField(label='Confirmar Nueva Contraseña', widget=forms.PasswordInput, required=False)
+
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
@@ -129,8 +132,30 @@ class UserEditForm(forms.ModelForm):
     rol = forms.ModelChoiceField(queryset=Rol.objects.all(), required=False)
     departamento = forms.ModelChoiceField(queryset=Departamento.objects.all(), required=False)
 
+    def clean_new_password1(self):
+        password1 = self.cleaned_data.get('new_password1')
+        if password1 and len(password1) < 8:
+            raise forms.ValidationError('La contraseña debe tener al menos 8 caracteres.')
+        if password1 and not any(char.isdigit() for char in password1):
+            raise forms.ValidationError('La contraseña debe contener al menos un número.')
+        if password1 and not any(char.isalpha() for char in password1):
+            raise forms.ValidationError('La contraseña debe contener al menos una letra.')
+        return password1
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError('Las contraseñas no coinciden.')
+        return password2
+
     def save(self, commit=True):
         instance = super().save(commit=False)
+
+        # Update password if provided
+        new_password1 = self.cleaned_data.get('new_password1')
+        if new_password1:
+            instance.set_password(new_password1)
 
         if commit:
             instance.save()
@@ -142,7 +167,6 @@ class UserEditForm(forms.ModelForm):
             usuario_instance.save()
 
         return instance
-    
 
 
 

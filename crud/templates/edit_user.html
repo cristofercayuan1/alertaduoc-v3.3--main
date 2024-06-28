@@ -68,6 +68,27 @@
                                 </div>
                             {% endif %}
                         </div>
+                        
+                        <!-- Campos para la nueva contraseña -->
+                        <div class="mb-3">
+                            <label for="id_new_password1" class="form-label">Nueva Contraseña</label>
+                            {{ form.new_password1 }}
+                            {% if form.new_password1.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.new_password1.errors|join:", " }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_new_password2" class="form-label">Confirmar Nueva Contraseña</label>
+                            {{ form.new_password2 }}
+                            {% if form.new_password2.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.new_password2.errors|join:", " }}
+                                </div>
+                            {% endif %}
+                        </div>
+
                         <div class="mb-3 row">
                             <div class="col-6 d-flex justify-content-start">
                                 <a href="{% url 'gestion_personal' %}" class="btn btn-secondary">Volver</a>

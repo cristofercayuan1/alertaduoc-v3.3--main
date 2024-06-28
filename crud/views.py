@@ -46,6 +46,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from collections import defaultdict
 
 ##Vistas Generales##
 
@@ -688,6 +689,20 @@ def estadisticas_alertas(request):
         total=Count('alerta')
     ).order_by('incidencia')
 
+    # Obtener el usuario con más alertas resueltas por departamento
+    usuarios_resueltas = Alerta.objects.filter(estado='2').values(
+        'departamento__nombredep', 'encargado__username'
+    ).annotate(total_resueltas=Count('idAlerta')).order_by('departamento__nombredep', '-total_resueltas')
+
+    # Crear un diccionario para mantener solo un usuario destacado por departamento
+    usuarios_destacados_dict = defaultdict(list)
+    for usuario in usuarios_resueltas:
+        dep_nombre = usuario['departamento__nombredep']
+        if dep_nombre not in usuarios_destacados_dict:
+            usuarios_destacados_dict[dep_nombre] = usuario
+
+    usuarios_destacados = list(usuarios_destacados_dict.values())
+
     def generar_grafico(datos, titulo, etiqueta_x, etiqueta_y):
         fig, ax = plt.subplots(figsize=(10, 6))
         etiquetas = [item[0] for item in datos]
@@ -713,9 +728,11 @@ def estadisticas_alertas(request):
         plt.close(fig)
         return grafico_base64
 
+    # Filtrar datos para excluir "Administración General"
     datos_resueltas = [
         (departamento.nombredep, (departamento.total_resueltas / total_alertas_resueltas) * 100 if total_alertas_resueltas > 0 else 0)
         for departamento in alertas_resueltas_por_departamento
+        if departamento.nombredep != "Administración General"
     ]
 
     datos_incidencia = [
@@ -731,6 +748,7 @@ def estadisticas_alertas(request):
         'alertas_por_tipo_incidencia': alertas_por_tipo_incidencia,
         'grafico_resueltas': grafico_resueltas,
         'grafico_solicitadas': grafico_solicitadas,
+        'usuarios_destacados': usuarios_destacados,
     }
 
     return render(request, 'estadisticas_alertas.html', context)
