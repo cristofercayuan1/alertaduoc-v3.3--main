@@ -1,6 +1,0 @@
-django
-pillow
-qrcode[pil]
-matplotlib
-xhtml2pdf
-reportlab
