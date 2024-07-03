@@ -19,7 +19,7 @@ SE ARREGLA VISTA DE ADMINISTRADORES SEGUN CORRESPONDA EN SOLICITUDES, GESTION PE
 --
 
 
---Detalles y Comandos Utilizados(Models.py)-- ???
+--Detalles y Comandos Utilizados(Models.py)-- hola
 
 models.Model: Clase base para todos los modelos de Django.
 models.CharField: Campo de texto con una longitud máxima.
